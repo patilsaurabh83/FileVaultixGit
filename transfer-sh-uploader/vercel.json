@@ -3,7 +3,7 @@
   "routes": [
     {
       "src": "/api/transfer/?",
-      "methods": ["OPTIONS", "POST", "DELETE"],
+      "methods": ["GET", "POST", "DELETE", "OPTIONS"],
       "dest": "/api/transfer.js",
       "headers": {
         "Access-Control-Allow-Credentials": "true",
