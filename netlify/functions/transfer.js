@@ -28,7 +28,7 @@ exports.handler = async function (event, context) {
         message: "Transfer.sh proxy is live 🚀",
         usage: {
           POST: "/.netlify/functions/transfer {fileName, mimeType, fileContent (base64)}",
-          DELETE: "/.netlify/functions/transfer?url=<download_url>",
+          DELETE: "/.netlify/functions/transfer?url=<download_url> (simulated)",
         },
       }),
     };
@@ -57,7 +57,7 @@ exports.handler = async function (event, context) {
     };
   }
 
-  // ✅ POST — upload
+  // ✅ POST — upload to Transfer.sh
   if (event.httpMethod === "POST") {
     try {
       const { fileName, mimeType, fileContent } = JSON.parse(event.body);
@@ -75,6 +75,7 @@ exports.handler = async function (event, context) {
 
       const buffer = Buffer.from(fileContent, "base64");
 
+      // Upload file to transfer.sh
       const uploadResponse = await fetch(`https://transfer.sh/${fileName}`, {
         method: "PUT",
         body: buffer,
@@ -85,6 +86,7 @@ exports.handler = async function (event, context) {
         },
       });
 
+      // If upload fails, return error response
       if (!uploadResponse.ok) {
         const errorText = await uploadResponse.text();
         return {
@@ -120,7 +122,7 @@ exports.handler = async function (event, context) {
     }
   }
 
-  // ❌ Fallback
+  // ❌ Fallback for unsupported methods
   return {
     statusCode: 405,
     headers: corsHeaders,
