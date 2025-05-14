@@ -1,0 +1,5 @@
+[build]
+  functions = "netlify/functions"  # Serverless functions directory
+
+[dev]
+  functions = "netlify/functions"  # Use this for local testing

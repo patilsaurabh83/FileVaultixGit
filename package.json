@@ -1,0 +1,15 @@
+{
+  "name": "transfer-sh-proxy",
+  "version": "1.0.0",
+  "description": "CORS-enabled proxy for transfer.sh file uploads and deletions",
+  "main": "index.js",
+  "scripts": {
+    "start": "netlify dev"
+  },
+  "keywords": ["transfer.sh", "file-upload", "serverless", "netlify"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "node-fetch": "^2.6.9"
+  }
+}
