@@ -4,12 +4,13 @@
   "description": "CORS-enabled proxy for transfer.sh file uploads and deletions",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": ["transfer.sh", "file-upload", "serverless", "vercel"],
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "node-fetch": "^2.6.9"
+    "node-fetch": "^3.0.0"
   }
 }
