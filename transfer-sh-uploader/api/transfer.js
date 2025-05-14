@@ -1,23 +1,23 @@
 const fetch = require("node-fetch")
 
-// CORS middleware to enable cross-origin requests
 const enableCors = (req, res) => {
-  // Set CORS headers
-  res.setHeader("Access-Control-Allow-Credentials", true)
-  res.setHeader("Access-Control-Allow-Origin", "*") 
+  const allowedOrigin = "https://innovativewizards-dev-ed.develop.my.site.com"
+
+  res.setHeader("Access-Control-Allow-Credentials", "true")
+  res.setHeader("Access-Control-Allow-Origin", allowedOrigin)
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS")
   res.setHeader(
     "Access-Control-Allow-Headers",
-    "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version",
+    "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"
   )
 
-  // Handle OPTIONS method for preflight requests
   if (req.method === "OPTIONS") {
     res.status(200).end()
     return true
   }
   return false
 }
+
 
 // Main handler function
 module.exports = async (req, res) => {
