@@ -2,8 +2,8 @@
   "version": 2,
   "routes": [
     {
-      "src": "/api/transfer/?",
-      "methods": ["GET", "POST", "DELETE", "OPTIONS"],
+      "src": "/api/transfer",
+      "methods": ["OPTIONS"],
       "dest": "/api/transfer.js",
       "headers": {
         "Access-Control-Allow-Credentials": "true",
@@ -11,6 +11,11 @@
         "Access-Control-Allow-Methods": "GET, POST, DELETE, OPTIONS",
         "Access-Control-Allow-Headers": "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"
       }
+    },
+    {
+      "src": "/api/transfer",
+      "methods": ["POST", "DELETE", "GET"],
+      "dest": "/api/transfer.js"
     }
   ]
 }
