@@ -89,6 +89,7 @@ exports.handler = async function (event, context) {
       // If upload fails, return error response
       if (!uploadResponse.ok) {
         const errorText = await uploadResponse.text();
+        console.error('Error uploading to Transfer.sh:', errorText);
         return {
           statusCode: uploadResponse.status,
           headers: corsHeaders,
