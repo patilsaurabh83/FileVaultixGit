@@ -27,7 +27,7 @@ exports.handler = async function (event, context) {
       body: JSON.stringify({
         message: "Transfer.sh proxy is live 🚀",
         usage: {
-          POST: "/.netlify/functions/transfer {fileName, mimeType, fileContent (base64)}",
+          PUT: "/.netlify/functions/transfer {fileName, mimeType, fileContent (base64)}",  // updated POST to PUT
           DELETE: "/.netlify/functions/transfer?url=<download_url> (simulated)",
         },
       }),
@@ -57,8 +57,8 @@ exports.handler = async function (event, context) {
     };
   }
 
-  // ✅ POST — upload to Transfer.sh
-  if (event.httpMethod === "POST") {
+  // ✅ PUT — upload to Transfer.sh (changed from POST to PUT)
+  if (event.httpMethod === "PUT") {
     try {
       const { fileName, mimeType, fileContent } = JSON.parse(event.body);
 
@@ -75,7 +75,7 @@ exports.handler = async function (event, context) {
 
       const buffer = Buffer.from(fileContent, "base64");
 
-      // Upload file to transfer.sh
+      // Upload file to transfer.sh using PUT method
       const uploadResponse = await fetch(`https://transfer.sh/${fileName}`, {
         method: "PUT",
         body: buffer,
