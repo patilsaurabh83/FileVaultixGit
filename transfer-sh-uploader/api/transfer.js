@@ -4,7 +4,7 @@ const fetch = require("node-fetch")
 const enableCors = (req, res) => {
   // Set CORS headers
   res.setHeader("Access-Control-Allow-Credentials", true)
-  res.setHeader("Access-Control-Allow-Origin", "*")
+  res.setHeader("Access-Control-Allow-Origin", "*") 
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS")
   res.setHeader(
     "Access-Control-Allow-Headers",
