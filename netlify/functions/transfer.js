@@ -27,14 +27,14 @@ exports.handler = async function (event, context) {
       body: JSON.stringify({
         message: "Transfer.sh proxy is live 🚀",
         usage: {
-          PUT: "/.netlify/functions/transfer {fileName, mimeType, fileContent (base64)}",  // updated POST to PUT
+          PUT: "/.netlify/functions/transfer {fileName, mimeType, fileContent (base64)}",
           DELETE: "/.netlify/functions/transfer?url=<download_url> (simulated)",
         },
       }),
     };
   }
 
-  // ✅ DELETE — simulate deletion by "forgetting" URL
+  // ✅ DELETE — Delete file from Transfer.sh using the download URL
   if (event.httpMethod === "DELETE") {
     const urlToDelete = event.queryStringParameters?.url;
     if (!urlToDelete) {
@@ -45,19 +45,47 @@ exports.handler = async function (event, context) {
       };
     }
 
-    // NOTE: transfer.sh doesn't support actual delete
-    return {
-      statusCode: 200,
-      headers: corsHeaders,
-      body: JSON.stringify({
-        success: true,
-        message: "Simulated deletion. transfer.sh does not support real DELETE.",
-        deletedUrl: urlToDelete,
-      }),
-    };
+    try {
+      // Send DELETE request to Transfer.sh
+      const deleteResponse = await fetch(urlToDelete, {
+        method: "DELETE",
+      });
+
+      if (!deleteResponse.ok) {
+        const errorText = await deleteResponse.text();
+        console.error('Error deleting file from Transfer.sh:', errorText);
+        return {
+          statusCode: deleteResponse.status,
+          headers: corsHeaders,
+          body: JSON.stringify({
+            error: "Delete failed on Transfer.sh",
+            details: errorText,
+          }),
+        };
+      }
+
+      return {
+        statusCode: 200,
+        headers: corsHeaders,
+        body: JSON.stringify({
+          success: true,
+          message: "File deleted successfully.",
+        }),
+      };
+    } catch (error) {
+      console.error("Delete error:", error);
+      return {
+        statusCode: 500,
+        headers: corsHeaders,
+        body: JSON.stringify({
+          error: "Internal server error",
+          message: error.message,
+        }),
+      };
+    }
   }
 
-  // ✅ PUT — upload to Transfer.sh (changed from POST to PUT)
+  // ✅ PUT — upload to Transfer.sh
   if (event.httpMethod === "PUT") {
     try {
       const { fileName, mimeType, fileContent } = JSON.parse(event.body);
@@ -76,6 +104,7 @@ exports.handler = async function (event, context) {
       const buffer = Buffer.from(fileContent, "base64");
 
       // Upload file to transfer.sh using PUT method
+      console.log(`Uploading file: ${fileName} to Transfer.sh`);
       const uploadResponse = await fetch(`https://transfer.sh/${fileName}`, {
         method: "PUT",
         body: buffer,
@@ -100,7 +129,10 @@ exports.handler = async function (event, context) {
         };
       }
 
+      // Extract the download URL from the response
       const downloadUrl = await uploadResponse.text();
+
+      console.log(`Upload successful: ${downloadUrl}`);
 
       return {
         statusCode: 200,
